@@ -1,0 +1,51 @@
+.data {
+	margin: 1rem;
+	padding: 1rem;
+	/* background-color: #230052; */
+
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	border-radius: 12px;
+	text-align: center;
+	color: white;
+}
+
+.data h2 {
+	font-size: 2rem;
+	color: #f7e702;
+}
+
+.data h3 {
+	color: #eccf77;
+	margin: 0;
+	font-size: 1rem;
+}
+
+.data h4 {
+	color: #eccf77;
+	margin: 10px;
+	font-size: 1rem;
+}
+
+.data p {
+	color: whitesmoke;
+	margin: 10px;
+	font-size: 1rem;
+	text-align: center;
+}
+
+.data_item {
+	margin-bottom: 1rem;
+	background-color: #230052;
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+.data button {
+	margin: .5rem;
+	cursor: pointer;
+	border: 1px solid whitesmoke;
+	color: green;
+	font-size: 1rem;
+	padding: .5rem 1.5rem;
+	border-radius: 30px;
+}
