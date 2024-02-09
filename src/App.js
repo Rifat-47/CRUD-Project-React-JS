@@ -1,7 +1,6 @@
 import Alldata from "./components/Alldata";
 import './App.css';
 import { useDispatch } from 'react-redux';
-import { ADD_DATA } from "./store/scc";
 import DataForm from "./components/DataForm";
 
 function App() {
@@ -9,7 +8,7 @@ function App() {
 
 	const addDataHandler = (data) => {
 		console.log(data);
-		dispatch({type: ADD_DATA, data: data});
+		dispatch({type: 'ADD_DATA', data: data});
 	};
 	return (
 		<div className="App">

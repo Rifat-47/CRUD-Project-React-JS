@@ -44,8 +44,13 @@
 	margin: .5rem;
 	cursor: pointer;
 	border: 1px solid whitesmoke;
-	color: green;
 	font-size: 1rem;
 	padding: .5rem 1.5rem;
 	border-radius: 30px;
+}
+
+.data button:hover {
+	background-color: #741188;
+	border-color: #741188;
+	color: white;
 }

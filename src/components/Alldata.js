@@ -3,54 +3,56 @@ import classes from './Alldata.module.css';
 import Data from './Data';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from "./Modal";
-import { LOAD_DATA, MODAL_OPEN } from '../store/scc';
 
 const Alldata = (props) => {
-    const dispatch = useDispatch();
-    const modal = useSelector(state => state.modal);
-    const backdrop = useSelector(state => state.backdrop);
-    const allData = useSelector(state => state.data);
+	const dispatch = useDispatch();
+	const modal = useSelector(state => state.modal);
+	const data = useSelector(state => state.data);
 
-    const { url } = props;
+	const { url } = props;
 
-    const modalOpenHandler = (id) => {
-        dispatch({ type: MODAL_OPEN, id:id});
-    };
+	const modalOpenHandler = (id) => {
+		dispatch({ type: 'MODAL_OPEN', id: id });
+	};
 
-    const deleteHandler = (id) => {
-        console.log(id);
-        dispatch({ type: 'DELETE_DATA', id: id })
-    };
+	const deleteHandler = (id) => {
+		console.log(id);
+		dispatch({ type: 'DELETE_DATA', id: id })
+	};
 
-    useEffect(() => {
-        async function fetchData(url) {
-            const response = await fetch(url);
-            const data = await response.json();
-            const dataString = JSON.stringify(data);
-            localStorage.setItem('myData', dataString);
-            dispatch({ type: LOAD_DATA, data: data})
-        }
-        fetchData(url);
+	useEffect(() => {
+		const fetchData = async (url) => {
+			try {
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				const allData = await response.json();
+				dispatch({ type: 'LOAD_DATA', data: allData })
+			} catch (error) {
+				console.error('Error fetching data:', error);
+			}
+		}
+		fetchData(url);
+	}, [url, dispatch]);
 
-    }, [url, dispatch]);
-
-    return (
-        <div className={classes.data}>
-            {allData.map(item => (
-                <>
-                    {modal && <Modal />}
-                    <Data
-                        key={item.id}
-                        item={item}
-                    >
-                        <button onClick={() => modalOpenHandler(item.id)}>Update</button>
-                        <button onClick={() => deleteHandler(item.id)}>Delete</button>
-                    </Data>
-                </>
-
-            ))}
-        </div>
-    );
+	return (
+		<div className={classes.data}>
+			{data.length === 0 && <p>Loading...</p>}
+			{data && data.map(item =>
+				<React.Fragment key={item.id}>
+					{modal && <Modal />}
+					<Data
+						key={item.id}
+						item={item}
+					>
+						<button onClick={() => modalOpenHandler(item.id)}>Update</button>
+						<button onClick={() => deleteHandler(item.id)}>Delete</button>
+					</Data>
+				</React.Fragment>
+			)}
+		</div>
+	);
 };
 
 export default Alldata;

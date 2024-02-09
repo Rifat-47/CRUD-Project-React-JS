@@ -1,40 +1,39 @@
 import { useRef, useState } from "react";
 import classes from './DataForm.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { MODAL_CLOSE } from '../store/scc';
 
 const DataForm = (props) => {
     const [error, setError] = useState(false);
     const titleRef = useRef();
     const bodyRef = useRef();
+
     const dispatch = useDispatch();
     const modal = useSelector(state => state.modal);
 
     const modalCloseHandler = (e) => {
-        dispatch({ type: MODAL_CLOSE });
+        dispatch({ type: 'MODAL_CLOSE' });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const id = localStorage.getItem('id') ? localStorage.getItem('id') : Math.random();
+
+        const enteredTitle = titleRef.current.value.trim();
+        const enteredBody = bodyRef.current.value.trim();
+        
+        if (enteredTitle === '' || enteredBody === '') {
+            setError(true);
+            return;
+        }
+
+        const id = localStorage.getItem('id') || Math.random();
+        localStorage.removeItem('id');
+        
         const intId = +id;
-        let enteredTitle = '';
-        let enteredBody = '';
-        if (titleRef.current.value.length !== 0 && bodyRef.current.value.length !== 0) {
-            setError(false);
-            enteredTitle = titleRef.current.value;
-            enteredBody = bodyRef.current.value;
-            const data = { title: enteredTitle, body: enteredBody, id: intId };
-            props.dataHandler(data);
-            localStorage.removeItem('id');
-            bodyRef.current.value = "";
-            titleRef.current.value = "";
-        }
-        else{
-            setError(<div className={classes.error}>
-                Please, give proper value for all fields.
-            </div>)
-        }
+        const data = { id: intId, title: enteredTitle, body: enteredBody };
+
+        props.dataHandler(data);
+        titleRef.current.value = '';
+        bodyRef.current.value = '';
     }
 
     return (
@@ -49,8 +48,8 @@ const DataForm = (props) => {
                     <input type="text" ref={bodyRef} />
                 </div>
                 <button className={classes.button} type="submit">Submit</button>
-                {error}
                 {modal && <button className={classes.button} onClick={modalCloseHandler}>Cancel</button>}
+                {error && <div className={classes.error}>Please provide a title and a body.</div>}
             </form>
         </div>
     );
